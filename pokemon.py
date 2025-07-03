@@ -6,6 +6,8 @@ import os
 import requests
 import json
 import pokemon_cache_loader
+import uuid
+from flask import session, redirect, url_for
 
 app = Flask(__name__)
 
@@ -261,6 +263,71 @@ def get_pokemon_api_data(name, form=None):
     print('API 404 for:', url)
     return None
 
+# In-memory mapping for demo; for production, use a persistent store
+CUSTOM_GAME_FILE = os.path.join(os.path.dirname(__file__), 'custom_games.json')
+if os.path.exists(CUSTOM_GAME_FILE):
+    with open(CUSTOM_GAME_FILE, 'r') as f:
+        custom_games = json.load(f)
+else:
+    custom_games = {}
+
+def save_custom_games():
+    with open(CUSTOM_GAME_FILE, 'w') as f:
+        json.dump(custom_games, f)
+
+@app.route('/custom_game', methods=['POST'])
+def create_custom_game():
+    data = request.json
+    pokemon_name = data.get('pokemon')
+    if not pokemon_name:
+        return jsonify({'error': 'Missing Pokémon name'}), 400
+    # Find canonical name
+    norm = canonical_name(pokemon_name)
+    matches = [p for p in POKEMON_LIST if p.get('canonical', canonical_name(p['name'])) == norm]
+    if not matches:
+        return jsonify({'error': 'Pokémon not found'}), 404
+    # Generate unique code
+    code = uuid.uuid4().hex[:12]
+    custom_games[code] = norm
+    save_custom_games()
+    # Return the secret link
+    link = url_for('home', game=code, _external=True)
+    return jsonify({'link': link, 'code': code})
+
+# Helper to get custom game Pokémon if code is present and valid
+
+def get_custom_game_pokemon():
+    # Accept game code from either query string or POST body
+    code = request.args.get('game')
+    if not code and request.is_json:
+        code = request.json.get('game')
+    if code and code in custom_games:
+        norm = custom_games[code]
+        matches = [p for p in POKEMON_LIST if p.get('canonical', canonical_name(p['name'])) == norm]
+        if matches:
+            return max(matches, key=lambda p: p.get('generation', 0))
+    return None
+
+@app.route('/')
+def home():
+    # Handle custom game creation via ?custom=NAME
+    custom_name = request.args.get('custom')
+    if custom_name:
+        # Call the create_custom_game logic directly (not via HTTP)
+        norm = canonical_name(custom_name)
+        matches = [p for p in POKEMON_LIST if p.get('canonical', canonical_name(p['name'])) == norm]
+        if not matches:
+            # Optionally, you could show an error page here
+            return redirect(url_for('home'))
+        # Generate unique code
+        code = uuid.uuid4().hex[:12]
+        custom_games[code] = norm
+        save_custom_games()
+        # Redirect to the secret game link
+        return redirect(url_for('home', game=code))
+    # Optionally, you can pass the custom game info to the template if needed
+    return render_template('home.html')
+
 @app.route('/check_guess', methods=['POST'])
 def check_guess():
     data = request.json
@@ -304,7 +371,12 @@ def check_guess():
     # Use canonical for all matching in check_guess
     matches = [p for p in POKEMON_LIST if p.get('canonical', canonical_name(p['name'])) == norm_guess]
     guess = max(matches, key=lambda p: p.get('generation', 0)) if matches else None
-    target = get_pokemon_of_the_day(timezone_offset)
+    # Use custom game Pokémon if present
+    custom_pokemon = get_custom_game_pokemon()
+    if custom_pokemon:
+        target = custom_pokemon
+    else:
+        target = get_pokemon_of_the_day(timezone_offset)
     if not guess:
         return jsonify({'error': 'Pokemon not found.'}), 404
 
@@ -504,7 +576,12 @@ def check_guess():
         'weight': weight,
         'height': height,
         'target_weight': target_weight,
-        'target_height': target_height
+        'target_height': target_height,
+        # Add target Pokémon details for frontend modal
+        'target_name': target.get('name'),
+        'target_type1': target.get('type1'),
+        'target_type2': target.get('type2'),
+        'target_generation': target.get('generation')
     }
     print('DEBUG: guess_stats', guess_stats)
     print('DEBUG: target_stats', target_stats)
@@ -513,6 +590,14 @@ def check_guess():
 
 @app.route('/pokemon_of_the_day', methods=['GET'])
 def pokemon_of_the_day():
+    # Check for custom game code
+    code = request.args.get('game')
+    if code and code in custom_games:
+        norm = custom_games[code]
+        matches = [p for p in POKEMON_LIST if p.get('canonical', canonical_name(p['name'])) == norm]
+        if matches:
+            target = max(matches, key=lambda p: p.get('generation', 0))
+            return jsonify({'name': target['name']})
     timezone_offset = int(request.args.get('timezone_offset', 0))
     target = get_pokemon_of_the_day(timezone_offset)
     return jsonify({'name': target['name']})
@@ -642,10 +727,6 @@ def pokemon_names():
                         })
                         seen.add(alias_norm)
     return jsonify({'names': names})
-
-@app.route('/')
-def home():
-    return render_template('home.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=5002)

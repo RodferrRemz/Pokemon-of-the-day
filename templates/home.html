@@ -334,6 +334,12 @@
             </div>
         </div>
         <script>
+            // Helper to get 'game' code from URL
+            function getGameCode() {
+                const params = new URLSearchParams(window.location.search);
+                return params.get('game');
+            }
+
             window.onload = function() {
                 const modal = document.getElementById('rulesModal');
                 const content = document.getElementById('rulesContent');
@@ -483,13 +489,16 @@
                     showResult('You already guessed that Pokémon!', false);
                     return;
                 }
+                let body = {
+                    guess: canonical,
+                    timezone_offset: getTimezoneOffset()
+                };
+                const gameCode = getGameCode();
+                if (gameCode) body.game = gameCode;
                 fetch('/check_guess', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({
-                        guess: canonical,
-                        timezone_offset: getTimezoneOffset()
-                    })
+                    body: JSON.stringify(body)
                 })
                 .then(res => {
                     if (!res.ok) {
@@ -590,6 +599,17 @@
                     // Only show 'You got it!' if the name matches the target's name (case-insensitive, normalized)
                     if (normalized === data.target_name?.toLowerCase().replace(/[^a-z0-9]/g, '')) {
                         resultText = '<br><span class="correct">You got it! 🎉</span>';
+                        // Show the give up modal with the correct Pokémon's data
+                        showGiveUpModal({
+                            name: data.name,
+                            displayName: regionalDisplayName(data.name),
+                            generation: data.generation_number || data.generation || '',
+                            type1: data.type1_name || data.type1 || '',
+                            type2: data.type2_name || data.type2 || '',
+                            weight: (typeof data.weight !== 'undefined' && data.weight !== null) ? data.weight : (typeof data.weight_kg !== 'undefined' ? data.weight_kg : ''),
+                            height: (typeof data.height !== 'undefined' && data.height !== null) ? data.height : (typeof data.height_m !== 'undefined' ? data.height_m : ''),
+                            apiName: data.name.toLowerCase().replace(/[^a-z0-9-]/g, '')
+                        });
                     }
                     showResult(html + resultText, true);
                     addGuessToList(data);
@@ -757,6 +777,9 @@
                                 }
                             });
                             // Generate Link button logic
+                            // Replace the old logic to POST to /custom_game and use the returned code
+                            // instead of showing the Pokémon name in the link
+
                             document.getElementById('generateCustomLinkBtn').onclick = function() {
                                 let val = input.value.trim();
                                 let canonical = input.getAttribute('data-normalized');
@@ -780,9 +803,23 @@
                                     document.getElementById('customGameLink').innerHTML = '<span style="color:#c62828;">Please select a valid Pokémon.</span>';
                                     return;
                                 }
-                                // Placeholder: show a fake link (future: backend support)
-                                let url = window.location.origin + window.location.pathname + '?custom=' + encodeURIComponent(canonical);
-                                document.getElementById('customGameLink').innerHTML = `<b>Shareable link:</b><br><a href='${url}' target='_blank' style='color:#3b4cca;'>${url}</a><br><span style='color:#888;font-size:0.95em;'>(Custom games require backend support to work fully.)</span>`;
+                                // Call backend to get a secret code
+                                fetch('/custom_game', {
+                                    method: 'POST',
+                                    headers: {'Content-Type': 'application/json'},
+                                    body: JSON.stringify({pokemon: canonical})
+                                })
+                                .then(res => res.json())
+                                .then(data => {
+                                    if (data.link) {
+                                        document.getElementById('customGameLink').innerHTML = `<b>Shareable link:</b><br><a href='${data.link}' target='_blank' style='color:#3b4cca;'>${data.link}</a>`;
+                                    } else {
+                                        document.getElementById('customGameLink').innerHTML = '<span style="color:#c62828;">Error creating custom game.</span>';
+                                    }
+                                })
+                                .catch(() => {
+                                    document.getElementById('customGameLink').innerHTML = '<span style="color:#c62828;">Error connecting to server.</span>';
+                                });
                             };
                             // Close modal logic
                             document.getElementById('closeCustomGameModal').onclick = function() {
@@ -811,7 +848,10 @@
             }
 
             function revealAnswer() {
-                fetch('/pokemon_of_the_day?timezone_offset=' + getTimezoneOffset())
+                const gameCode = getGameCode();
+                let url = '/pokemon_of_the_day?timezone_offset=' + getTimezoneOffset();
+                if (gameCode) url += '&game=' + encodeURIComponent(gameCode);
+                fetch(url)
                 .then(res => res.json())
                 .then(data => {
                     // Compose displayName and API name
