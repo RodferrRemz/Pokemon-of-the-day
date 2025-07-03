@@ -1,0 +1,729 @@
+[
+  {
+    "name": "rattata alola",
+    "generation": 7,
+    "type1": "dark",
+    "type2": "normal",
+    "types": [
+      "dark",
+      "normal"
+    ],
+    "weight": 38,
+    "height": 3,
+    "display": "Rattata Alola"
+  },
+  {
+    "name": "raticate alola",
+    "generation": 7,
+    "type1": "dark",
+    "type2": "normal",
+    "types": [
+      "dark",
+      "normal"
+    ],
+    "weight": 255,
+    "height": 7,
+    "display": "Raticate Alola"
+  },
+  {
+    "name": "raichu alola",
+    "generation": 7,
+    "type1": "electric",
+    "type2": "psychic",
+    "types": [
+      "electric",
+      "psychic"
+    ],
+    "weight": 210,
+    "height": 7,
+    "display": "Raichu Alola"
+  },
+  {
+    "name": "sandshrew alola",
+    "generation": 7,
+    "type1": "ice",
+    "type2": "steel",
+    "types": [
+      "ice",
+      "steel"
+    ],
+    "weight": 400,
+    "height": 7,
+    "display": "Sandshrew Alola"
+  },
+  {
+    "name": "sandslash alola",
+    "generation": 7,
+    "type1": "ice",
+    "type2": "steel",
+    "types": [
+      "ice",
+      "steel"
+    ],
+    "weight": 550,
+    "height": 12,
+    "display": "Sandslash Alola"
+  },
+  {
+    "name": "vulpix alola",
+    "generation": 7,
+    "type1": "ice",
+    "type2": "",
+    "types": [
+      "ice"
+    ],
+    "weight": 99,
+    "height": 6,
+    "display": "Vulpix Alola"
+  },
+  {
+    "name": "ninetales alola",
+    "generation": 7,
+    "type1": "ice",
+    "type2": "fairy",
+    "types": [
+      "ice",
+      "fairy"
+    ],
+    "weight": 199,
+    "height": 11,
+    "display": "Ninetales Alola"
+  },
+  {
+    "name": "diglett alola",
+    "generation": 7,
+    "type1": "ground",
+    "type2": "steel",
+    "types": [
+      "ground",
+      "steel"
+    ],
+    "weight": 10,
+    "height": 2,
+    "display": "Diglett Alola"
+  },
+  {
+    "name": "dugtrio alola",
+    "generation": 7,
+    "type1": "ground",
+    "type2": "steel",
+    "types": [
+      "ground",
+      "steel"
+    ],
+    "weight": 666,
+    "height": 7,
+    "display": "Dugtrio Alola"
+  },
+  {
+    "name": "meowth alola",
+    "generation": 7,
+    "type1": "dark",
+    "type2": "",
+    "types": [
+      "dark"
+    ],
+    "weight": 42,
+    "height": 4,
+    "display": "Meowth Alola"
+  },
+  {
+    "name": "persian alola",
+    "generation": 7,
+    "type1": "dark",
+    "type2": "",
+    "types": [
+      "dark"
+    ],
+    "weight": 330,
+    "height": 11,
+    "display": "Persian Alola"
+  },
+  {
+    "name": "geodude alola",
+    "generation": 7,
+    "type1": "rock",
+    "type2": "electric",
+    "types": [
+      "rock",
+      "electric"
+    ],
+    "weight": 203,
+    "height": 4,
+    "display": "Geodude Alola"
+  },
+  {
+    "name": "graveler alola",
+    "generation": 7,
+    "type1": "rock",
+    "type2": "electric",
+    "types": [
+      "rock",
+      "electric"
+    ],
+    "weight": 1100,
+    "height": 10,
+    "display": "Graveler Alola"
+  },
+  {
+    "name": "golem alola",
+    "generation": 7,
+    "type1": "rock",
+    "type2": "electric",
+    "types": [
+      "rock",
+      "electric"
+    ],
+    "weight": 3160,
+    "height": 17,
+    "display": "Golem Alola"
+  },
+  {
+    "name": "grimer alola",
+    "generation": 7,
+    "type1": "poison",
+    "type2": "dark",
+    "types": [
+      "poison",
+      "dark"
+    ],
+    "weight": 420,
+    "height": 7,
+    "display": "Grimer Alola"
+  },
+  {
+    "name": "muk alola",
+    "generation": 7,
+    "type1": "poison",
+    "type2": "dark",
+    "types": [
+      "poison",
+      "dark"
+    ],
+    "weight": 520,
+    "height": 10,
+    "display": "Muk Alola"
+  },
+  {
+    "name": "exeggutor alola",
+    "generation": 7,
+    "type1": "grass",
+    "type2": "dragon",
+    "types": [
+      "grass",
+      "dragon"
+    ],
+    "weight": 4156,
+    "height": 109,
+    "display": "Exeggutor Alola"
+  },
+  {
+    "name": "marowak alola",
+    "generation": 7,
+    "type1": "fire",
+    "type2": "ghost",
+    "types": [
+      "fire",
+      "ghost"
+    ],
+    "weight": 340,
+    "height": 10,
+    "display": "Marowak Alola"
+  },
+  {
+    "name": "meowth galar",
+    "generation": 8,
+    "type1": "steel",
+    "type2": "",
+    "types": [
+      "steel"
+    ],
+    "weight": 75,
+    "height": 4,
+    "display": "Meowth Galar"
+  },
+  {
+    "name": "ponyta galar",
+    "generation": 8,
+    "type1": "psychic",
+    "type2": "",
+    "types": [
+      "psychic"
+    ],
+    "weight": 240,
+    "height": 8,
+    "display": "Ponyta Galar"
+  },
+  {
+    "name": "rapidash galar",
+    "generation": 8,
+    "type1": "psychic",
+    "type2": "fairy",
+    "types": [
+      "psychic",
+      "fairy"
+    ],
+    "weight": 800,
+    "height": 17,
+    "display": "Rapidash Galar"
+  },
+  {
+    "name": "slowpoke galar",
+    "generation": 8,
+    "type1": "psychic",
+    "type2": "",
+    "types": [
+      "psychic"
+    ],
+    "weight": 360,
+    "height": 12,
+    "display": "Slowpoke Galar"
+  },
+  {
+    "name": "slowbro galar",
+    "generation": 8,
+    "type1": "poison",
+    "type2": "psychic",
+    "types": [
+      "poison",
+      "psychic"
+    ],
+    "weight": 705,
+    "height": 16,
+    "display": "Slowbro Galar"
+  },
+  {
+    "name": "farfetchd galar",
+    "generation": 8,
+    "type1": "fighting",
+    "type2": "",
+    "types": [
+      "fighting"
+    ],
+    "weight": 420,
+    "height": 8,
+    "display": "Farfetch'd Galar"
+  },
+  {
+    "name": "weezing galar",
+    "generation": 8,
+    "type1": "poison",
+    "type2": "fairy",
+    "types": [
+      "poison",
+      "fairy"
+    ],
+    "weight": 160,
+    "height": 30,
+    "display": "Weezing Galar"
+  },
+  {
+    "name": "mr mime galar",
+    "generation": 8,
+    "type1": "ice",
+    "type2": "psychic",
+    "types": [
+      "ice",
+      "psychic"
+    ],
+    "weight": 568,
+    "height": 14,
+    "display": "Mr. Mime Galar"
+  },
+  {
+    "name": "corsola galar",
+    "generation": 8,
+    "type1": "ghost",
+    "type2": "",
+    "types": [
+      "ghost"
+    ],
+    "weight": 5,
+    "height": 6,
+    "display": "Corsola Galar"
+  },
+  {
+    "name": "zigzagoon galar",
+    "generation": 8,
+    "type1": "dark",
+    "type2": "normal",
+    "types": [
+      "dark",
+      "normal"
+    ],
+    "weight": 175,
+    "height": 4,
+    "display": "Zigzagoon Galar"
+  },
+  {
+    "name": "linoone galar",
+    "generation": 8,
+    "type1": "dark",
+    "type2": "normal",
+    "types": [
+      "dark",
+      "normal"
+    ],
+    "weight": 325,
+    "height": 5,
+    "display": "Linoone Galar"
+  },
+  {
+    "name": "darumaka galar",
+    "generation": 8,
+    "type1": "ice",
+    "type2": "",
+    "types": [
+      "ice"
+    ],
+    "weight": 400,
+    "height": 7,
+    "display": "Darumaka Galar"
+  },
+  {
+    "name": "darmanitan galar standard",
+    "generation": 8,
+    "type1": "ice",
+    "type2": "",
+    "types": [
+      "ice"
+    ],
+    "weight": 1200,
+    "height": 17,
+    "display": "Darmanitan Galar Standard"
+  },
+  {
+    "name": "yamask galar",
+    "generation": 8,
+    "type1": "ground",
+    "type2": "ghost",
+    "types": [
+      "ground",
+      "ghost"
+    ],
+    "weight": 15,
+    "height": 5,
+    "display": "Yamask Galar"
+  },
+  {
+    "name": "stunfisk galar",
+    "generation": 8,
+    "type1": "ground",
+    "type2": "steel",
+    "types": [
+      "ground",
+      "steel"
+    ],
+    "weight": 205,
+    "height": 7,
+    "display": "Stunfisk Galar"
+  },
+  {
+    "name": "articuno galar",
+    "generation": 8,
+    "type1": "psychic",
+    "type2": "flying",
+    "types": [
+      "psychic",
+      "flying"
+    ],
+    "weight": 509,
+    "height": 17,
+    "display": "Articuno Galar"
+  },
+  {
+    "name": "zapdos galar",
+    "generation": 8,
+    "type1": "fighting",
+    "type2": "flying",
+    "types": [
+      "fighting",
+      "flying"
+    ],
+    "weight": 582,
+    "height": 16,
+    "display": "Zapdos Galar"
+  },
+  {
+    "name": "moltres galar",
+    "generation": 8,
+    "type1": "dark",
+    "type2": "flying",
+    "types": [
+      "dark",
+      "flying"
+    ],
+    "weight": 660,
+    "height": 20,
+    "display": "Moltres Galar"
+  },
+  {
+    "name": "growlithe hisui",
+    "generation": 8,
+    "type1": "fire",
+    "type2": "rock",
+    "types": [
+      "fire",
+      "rock"
+    ],
+    "weight": 227,
+    "height": 8,
+    "display": "Growlithe Hisui"
+  },
+  {
+    "name": "arcanine hisui",
+    "generation": 8,
+    "type1": "fire",
+    "type2": "rock",
+    "types": [
+      "fire",
+      "rock"
+    ],
+    "weight": 1680,
+    "height": 20,
+    "display": "Arcanine Hisui"
+  },
+  {
+    "name": "voltorb hisui",
+    "generation": 8,
+    "type1": "electric",
+    "type2": "grass",
+    "types": [
+      "electric",
+      "grass"
+    ],
+    "weight": 130,
+    "height": 5,
+    "display": "Voltorb Hisui"
+  },
+  {
+    "name": "electrode hisui",
+    "generation": 8,
+    "type1": "electric",
+    "type2": "grass",
+    "types": [
+      "electric",
+      "grass"
+    ],
+    "weight": 710,
+    "height": 12,
+    "display": "Electrode Hisui"
+  },
+  {
+    "name": "qwilfish hisui",
+    "generation": 8,
+    "type1": "dark",
+    "type2": "poison",
+    "types": [
+      "dark",
+      "poison"
+    ],
+    "weight": 39,
+    "height": 5,
+    "display": "Qwilfish Hisui"
+  },
+  {
+    "name": "sneasel hisui",
+    "generation": 8,
+    "type1": "fighting",
+    "type2": "poison",
+    "types": [
+      "fighting",
+      "poison"
+    ],
+    "weight": 270,
+    "height": 9,
+    "display": "Sneasel Hisui"
+  },
+  {
+    "name": "kleavor",
+    "generation": 8,
+    "type1": "bug",
+    "type2": "rock",
+    "types": [
+      "bug",
+      "rock"
+    ],
+    "weight": 890,
+    "height": 18,
+    "display": "Kleavor"
+  },
+  {
+    "name": "braviary hisui",
+    "generation": 8,
+    "type1": "psychic",
+    "type2": "flying",
+    "types": [
+      "psychic",
+      "flying"
+    ],
+    "weight": 434,
+    "height": 17,
+    "display": "Braviary Hisui"
+  },
+  {
+    "name": "zorua hisui",
+    "generation": 8,
+    "type1": "normal",
+    "type2": "ghost",
+    "types": [
+      "normal",
+      "ghost"
+    ],
+    "weight": 125,
+    "height": 7,
+    "display": "Zorua Hisui"
+  },
+  {
+    "name": "zoroark hisui",
+    "generation": 8,
+    "type1": "normal",
+    "type2": "ghost",
+    "types": [
+      "normal",
+      "ghost"
+    ],
+    "weight": 730,
+    "height": 16,
+    "display": "Zoroark Hisui"
+  },
+  {
+    "name": "basculegion female",
+    "generation": 8,
+    "type1": "water",
+    "type2": "ghost",
+    "types": [
+      "water",
+      "ghost"
+    ],
+    "weight": 1100,
+    "height": 30,
+    "display": "Basculegion Female"
+  },
+  {
+    "name": "tauros paldea combat breed",
+    "generation": 9,
+    "type1": "fighting",
+    "type2": "",
+    "types": [
+      "fighting"
+    ],
+    "weight": 1150,
+    "height": 14,
+    "display": "Tauros Paldea Combat"
+  },
+  {
+    "name": "tauros paldea blaze breed",
+    "generation": 9,
+    "type1": "fighting",
+    "type2": "fire",
+    "types": [
+      "fighting",
+      "fire"
+    ],
+    "weight": 850,
+    "height": 14,
+    "display": "Tauros Paldea Blaze"
+  },
+  {
+    "name": "tauros paldea aqua breed",
+    "generation": 9,
+    "type1": "fighting",
+    "type2": "water",
+    "types": [
+      "fighting",
+      "water"
+    ],
+    "weight": 1100,
+    "height": 14,
+    "display": "Tauros Paldea Aqua"
+  },
+  {
+    "name": "wooper paldea",
+    "generation": 9,
+    "type1": "poison",
+    "type2": "ground",
+    "types": [
+      "poison",
+      "ground"
+    ],
+    "weight": 110,
+    "height": 4,
+    "display": "Wooper Paldea"
+  },
+  {
+    "name": "lycanroc midday",
+    "generation": 7,
+    "type1": "rock",
+    "type2": "",
+    "types": [
+      "rock"
+    ],
+    "weight": 250,
+    "height": 8,
+    "display": "Lycanroc Midday"
+  },
+  {
+    "name": "lycanroc midnight",
+    "generation": 7,
+    "type1": "rock",
+    "type2": "",
+    "types": [
+      "rock"
+    ],
+    "weight": 250,
+    "height": 11,
+    "display": "Lycanroc Midnight"
+  },
+  {
+    "name": "lycanroc dusk",
+    "generation": 7,
+    "type1": "rock",
+    "type2": "",
+    "types": [
+      "rock"
+    ],
+    "weight": 250,
+    "height": 8,
+    "display": "Lycanroc Dusk"
+  },
+  {
+    "name": "sneasler",
+    "generation": 8,
+    "type1": "fighting",
+    "type2": "poison",
+    "types": [
+      "fighting",
+      "poison"
+    ],
+    "weight": 430,
+    "height": 13,
+    "display": "Sneasler"
+  },
+  {
+    "name": "overqwil",
+    "generation": 8,
+    "type1": "dark",
+    "type2": "poison",
+    "types": [
+      "dark",
+      "poison"
+    ],
+    "weight": 605,
+    "height": 25,
+    "display": "Overqwil"
+  },
+  {
+    "name": "ursaluna",
+    "generation": 8,
+    "type1": "ground",
+    "type2": "normal",
+    "types": [
+      "ground",
+      "normal"
+    ],
+    "weight": 2900,
+    "height": 24,
+    "display": "Ursaluna"
+  }
+]

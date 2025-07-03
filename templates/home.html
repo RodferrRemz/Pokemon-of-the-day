@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pokémon Wordle</title>
+        <style>
+            @font-face {
+                font-family: 'PKMN RBYGSC';
+                src: url('/static/PKMN RBYGSC.ttf') format('truetype');
+                font-weight: normal;
+                font-style: normal;
+            }
+            body {
+                background: linear-gradient(120deg, #f8ffae 0%, #43c6ac 100%);
+                font-family: 'Segoe UI', Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+                width: 100vw;
+                height: 100vh;
+                overflow-x: hidden;
+            }
+            .layout-flex {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                width: 100vw;
+                position: fixed;
+                top: 0;
+                left: 0;
+            }
+            .container {
+                max-width: 500px;
+                background: rgba(255,255,255,0.95);
+                border-radius: 16px;
+                box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+                padding: 32px 24px;
+                text-align: center;
+                margin: 0;
+            }
+            h1 {
+                color: #ffcb05;
+                text-shadow: 2px 2px 0 #3b4cca;
+                font-size: 2.5em;
+                margin-bottom: 0.2em;
+            }
+            h2 {
+                color: #3b4cca;
+                margin-top: 0.2em;
+                margin-bottom: 0.8em;
+                font-size: 1.15em;
+                font-weight: normal;
+                letter-spacing: 0.01em;
+            }
+            .emoji {
+                font-size: 2.2em;
+                margin-bottom: 0.2em;
+                display: block;
+            }
+            ul {
+                text-align: left;
+                margin: 1.5em auto 0 auto;
+                padding: 0 1.5em;
+            }
+            code {
+                background: #f3f3f3;
+                border-radius: 4px;
+                padding: 2px 6px;
+                color: #3b4cca;
+            }
+            .footer {
+                margin-top: 2em;
+                color: #888;
+                font-size: 0.95em;
+            }
+            .pokemon-image {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 380px;
+                max-width: 90%;
+                margin-bottom: 0.2em;
+            }
+            .guess-section {
+                margin: 2em 0 1em 0;
+                position: relative;
+            }
+            .guess-input {
+                font-size: 1.1em;
+                padding: 0.5em;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+                width: 70%;
+                margin-right: 0.5em;
+            }
+            .guess-btn {
+                font-size: 1.1em;
+                padding: 0.5em 1.2em;
+                border-radius: 6px;
+                border: none;
+                background: #3b4cca;
+                color: #fff;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .guess-btn:hover {
+                background: #2a2e70;
+            }
+            .result-box {
+                margin-top: 1.5em;
+                padding: 1em;
+                border-radius: 10px;
+                background: #f3f3f3;
+                min-height: 2em;
+                font-size: 1.1em;
+                color: #222;
+            }
+            .correct {
+                color: #2e7d32;
+                font-weight: bold;
+            }
+            .incorrect {
+                color: #c62828;
+                font-weight: bold;
+            }
+            .guesses-box {
+                width: 420px;
+                min-height: 300px;
+                max-height: 400px;
+                overflow-y: auto;
+                background: rgba(255,255,255,0.93);
+                border-radius: 14px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+                padding: 18px 14px;
+                font-size: 1em;
+                margin-left: 48px;
+            }
+            .guesses-title {
+                font-weight: bold;
+                color: #3b4cca;
+                margin-bottom: 0.7em;
+                font-size: 1.1em;
+                text-align: center;
+            }
+            .guess-entry {
+                margin-bottom: 0.7em;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 0.3em;
+            }
+            .guess-entry:last-child {
+                border-bottom: none;
+            }
+            .type-box {
+                display: inline-block;
+                padding: 2px 12px;
+                border-radius: 16px;
+                font-size: 1em;
+                font-weight: bold;
+                margin: 0 6px 4px 0;
+                color: #fff !important;
+                min-width: 60px;
+                text-align: center;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+                background: #bbb;
+                opacity: 1 !important;
+            }
+            .type-correct {
+                background: #2e7d32 !important;
+                color: #fff !important;
+            }
+            .type-incorrect {
+                background: #c62828 !important;
+                color: #fff !important;
+            }
+            .weight-box {
+                display: inline-block;
+                padding: 2px 12px;
+                border-radius: 16px;
+                font-size: 1em;
+                font-weight: bold;
+                margin: 0 6px 4px 0;
+                color: #fff !important;
+                min-width: 80px;
+                text-align: center;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+                background: #bbb;
+                opacity: 1 !important;
+            }
+            .weight-correct {
+                background: #2e7d32 !important;
+                color: #fff !important;
+            }
+            .weight-close {
+                background: #fbc02d !important;
+                color: #fff !important;
+            }
+            .weight-incorrect {
+                background: #c62828 !important;
+                color: #fff !important;
+            }
+            .height-box {
+                display: inline-block;
+                padding: 2px 12px;
+                border-radius: 16px;
+                font-size: 1em;
+                font-weight: bold;
+                margin: 0 6px 4px 0;
+                color: #fff !important;
+                min-width: 80px;
+                text-align: center;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+                background: #bbb;
+                opacity: 1 !important;
+            }
+            .height-correct {
+                background: #2e7d32 !important;
+                color: #fff !important;
+            }
+            .height-close {
+                background: #fbc02d !important;
+                color: #fff !important;
+            }
+            .height-incorrect {
+                background: #c62828 !important;
+                color: #fff !important;
+            }
+            .autocomplete-list {
+                position: absolute;
+                background: #fff;
+                border: 1px solid #ccc;
+                border-radius: 0 0 8px 8px;
+                max-height: 180px;
+                overflow-y: auto;
+                width: 70%;
+                min-width: 180px;
+                left: 0;
+                right: 0;
+                z-index: 10;
+                margin-top: -2px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+            .autocomplete-item {
+                display: grid;
+                grid-template-columns: 80px 1fr;
+                align-items: center;
+                height: 56px;
+                padding: 0;
+            }
+            .autocomplete-item img {
+                width: 40px;
+                height: 40px;
+                object-fit: contain;
+                justify-self: center;
+                align-self: center;
+            }
+            .autocomplete-item span {
+                display: flex;
+                align-items: center;
+                height: 100%;
+                font-size: 1.4em;
+                font-family: 'PKMN RBYGSC', Arial, sans-serif;
+                padding-left: 16px;
+                text-align: left;
+            }
+            .autocomplete-item.active, .autocomplete-item:hover {
+                background: #e3e9ff;
+                box-shadow: 0 2px 8px rgba(59,76,202,0.10);
+                cursor: pointer;
+            }
+            .didyoumean {
+                color: #c62828;
+                font-size: 1em;
+                margin-top: 0.5em;
+                font-style: italic;
+            }
+            .autofill-container {
+                position: relative;
+                width: 100%;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Rules Modal -->
+        <div id="rulesModal" style="position:fixed;z-index:1000;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;">
+            <div id="rulesContent" style="background:#fff;padding:2rem 2.5rem;border-radius:12px;max-width:420px;box-shadow:0 4px 32px rgba(0,0,0,0.2);text-align:left;position:relative;z-index:2000;pointer-events:auto;">
+                <h2 style="margin-top:0;">How to Play</h2>
+                <ul style="padding-left:1.2em;">
+                    <li>Guess the Pokémon of the day by typing its name.</li>
+                    <li>After each guess, you'll see hints about generation, types, weight, and height.</li>
+                    <li>Green means a match, yellow means close, gray means no match.</li>
+                    <li>Try to guess in as few attempts as possible!</li>
+                </ul>
+                <button id="closeRules" style="margin-top:1.5em;padding:0.5em 1.2em;background:#1976d2;color:#fff;border:none;border-radius:6px;font-size:1em;cursor:pointer;">Got it!</button>
+            </div>
+        </div>
+        <!-- Give Up Modal -->
+        <div id="giveUpModal" style="display:none;position:fixed;z-index:2000;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;">
+            <div id="giveUpContent" style="background:#fff;padding:2rem 2.5rem;border-radius:12px;max-width:420px;box-shadow:0 4px 32px rgba(0,0,0,0.2);text-align:center;position:relative;z-index:2100;">
+                <!-- Content will be filled dynamically -->
+            </div>
+        </div>
+        <div id="mainContent">
+            <div class="layout-flex">
+                <div class="container">
+                    <h1>Pokémon of the Day</h1>
+                    <!-- Show image if available, else fallback text -->
+                    <img src="/static/pokemon_of_the_day.png" alt="Pokémon of the Day" class="pokemon-image">
+                    <p>Guess the <b>Pokémon of the day</b> based on its attributes!
+                         A fun game that will test your Pokémon knowledge to its limits!</p>
+                    <div class="guess-section">
+                        <input type="text" id="guessInput" class="guess-input" placeholder="Enter Pokémon name..." autocomplete="off">
+                        <div id="autocompleteList" class="autocomplete-list" style="display:none"></div>
+                        <div id="didYouMean" class="didyoumean" style="display:none"></div>
+                        <button class="guess-btn" onclick="submitGuess()">Guess</button>
+                    </div>
+                    <div id="resultBox" class="result-box"></div>
+                    <div>
+                        <button class="guess-btn" onclick="revealAnswer()">I give up</button>
+                    </div>
+                    <div class="footer">
+                        <span>Made with love for Pokémon fans</span>
+                        <button id="reportIssueBtn" style="margin-left:18px;padding:0.4em 1em;background:#c62828;color:#fff;border:none;border-radius:6px;font-size:0.98em;cursor:pointer;">Report an Issue</button>
+                    </div>
+                </div>
+                <div class="guesses-box">
+                    <div class="guesses-title">Previous Guesses
+                        <span id="attemptCounter" style="margin-left:12px;font-size:1.1em;font-weight:bold;"></span>
+                    </div>
+                    <div id="guessesList"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+            window.onload = function() {
+                const modal = document.getElementById('rulesModal');
+                const content = document.getElementById('rulesContent');
+                const closeBtn = document.getElementById('closeRules');
+                const mainContent = document.getElementById('mainContent');
+                // Fade in effect for modal background only
+                modal.style.opacity = 0;
+                modal.style.display = 'flex';
+                setTimeout(() => { modal.style.transition = 'opacity 0.4s'; modal.style.opacity = 1; }, 50);
+                // Prevent content from fading with background
+                content.style.transition = 'none';
+                content.style.opacity = 1;
+                content.style.zIndex = 2000;
+                content.style.pointerEvents = 'auto';
+                // When modal fades out, keep content visible until the end
+                closeBtn.onclick = function() {
+                    modal.style.transition = 'opacity 0.4s';
+                    modal.style.opacity = 0;
+                    setTimeout(() => { modal.style.display = 'none'; }, 400);
+                    mainContent.style.filter = '';
+                };
+                // Fade background (main content)
+                mainContent.style.transition = 'filter 0.4s';
+                mainContent.style.filter = 'blur(2px)';
+                closeBtn.addEventListener('click', function() {
+                    mainContent.style.filter = '';
+                });
+            };
+        </script>
+        <script>
+            function getTimezoneOffset() {
+                return -new Date().getTimezoneOffset() / 60;
+            }
+
+            const guesses = [];
+
+            function normalizeGuessName(guess) {
+                const g = guess.trim().toLowerCase();
+                // Normalize all possible Nidoran female variants
+                if (
+                    g === 'nidoran ♀' || g === 'nidoran♀' || g === 'nidoran♀.' ||
+                    g === 'nidoran female' || g === 'nidoran-female' || g === 'nidoranfemale' ||
+                    g.replace(/[^a-z0-9]/g, '') === 'nidoranfemale'
+                ) return 'nidoranfemale';
+                // Normalize all possible Nidoran male variants
+                if (
+                    g === 'nidoran ♂' || g === 'nidoran♂' || g === 'nidoran♂.' ||
+                    g === 'nidoran male' || g === 'nidoran-male' || g === 'nidoranmale' ||
+                    g.replace(/[^a-z0-9]/g, '') === 'nidoranmale'
+                ) return 'nidoranmale';
+                // Normalize all other names: remove non-alphanumeric characters
+                return g.replace(/[^a-z0-9]/g, '');
+            }
+
+            // Move regionalDisplayName to global scope so it can be used in both submitGuess and renderGuesses
+            function regionalDisplayName(name) {
+                const regionMap = {
+                    'alola': 'Alolan',
+                    'galar': 'Galarian',
+                    'hisui': 'Hisuian',
+                    'paldea': 'Paldean'
+                };
+                let lower = name.toLowerCase();
+                // Special case for Galarian Darmanitan
+                if (lower === 'darmanitan galar standard') {
+                    return 'Galarian Darmanitan';
+                }
+                // Special cases for Paldean Tauros forms
+                if (lower === 'tauros paldea combat breed') {
+                    return 'Paldean Tauros Combat';
+                }
+                if (lower === 'tauros paldea blaze breed') {
+                    return 'Paldean Tauros Blaze';
+                }
+                if (lower === 'tauros paldea aqua breed') {
+                    return 'Paldean Tauros Aqua';
+                }
+                // Also support without 'breed' suffix (autocomplete may use either)
+                if (lower === 'tauros paldea combat') {
+                    return 'Paldean Tauros Combat';
+                }
+                if (lower === 'tauros paldea blaze') {
+                    return 'Paldean Tauros Blaze';
+                }
+                if (lower === 'tauros paldea aqua') {
+                    return 'Paldean Tauros Aqua';
+                }
+                // Special cases for Basculegion forms
+                if (lower === 'basculegionmale') {
+                    return 'Basculegion (Male)';
+                }
+                if (lower === 'basculegionfemale') {
+                    return 'Basculegion (Female)';
+                }
+                // Hisuian forms (e.g., zoroark hisui)
+                if (lower.endsWith(' hisui')) {
+                    let base = name.slice(0, -6);
+                    return 'Hisuian ' + base.charAt(0).toUpperCase() + base.slice(1);
+                }
+                for (const region in regionMap) {
+                    if (lower.endsWith(' ' + region)) {
+                        let base = name.slice(0, -(region.length + 1));
+                        return regionMap[region] + ' ' + base.charAt(0).toUpperCase() + base.slice(1);
+                    }
+                }
+                if (lower.startsWith('lycanroc ')) {
+                    let parts = name.split(' ');
+                    if (parts.length === 2) return 'Lycanroc ' + parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
+                    return 'Lycanroc';
+                }
+                return name.charAt(0).toUpperCase() + name.slice(1);
+            }
+
+            function submitGuess() {
+                const guessInput = document.getElementById('guessInput');
+                let guess = guessInput.value.trim();
+                // Use normalized value from autocomplete if available
+                let canonical = guessInput.getAttribute('data-normalized');
+                if (!canonical) {
+                    for (const obj of pokemonNames) {
+                        if (obj.display.toLowerCase() === guess.toLowerCase() || obj.value.toLowerCase() === guess.toLowerCase()) {
+                            canonical = obj.value;
+                            break;
+                        }
+                    }
+                }
+                if (!canonical) {
+                    // Try to find by closest match (case-insensitive)
+                    for (const obj of pokemonNames) {
+                        if (obj.display.toLowerCase().replace(/[^a-z0-9]/g, '') === guess.toLowerCase().replace(/[^a-z0-9]/g, '')) {
+                            canonical = obj.value;
+                            break;
+                        }
+                    }
+                }
+                if (!canonical) {
+                    // Fallback to normalized
+                    canonical = normalizeGuessName(guess);
+                }
+                guessInput.removeAttribute('data-normalized'); // Clear after use
+                if (!canonical) {
+                    showResult('Please enter a Pokémon name.', false);
+                    return;
+                }
+                // Prevent duplicate guesses
+                if (guesses.some(g => g.name.toLowerCase().replace(/[^a-z0-9]/g, '') === canonical.toLowerCase().replace(/[^a-z0-9]/g, ''))) {
+                    showResult('You already guessed that Pokémon!', false);
+                    return;
+                }
+                fetch('/check_guess', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        guess: canonical,
+                        timezone_offset: getTimezoneOffset()
+                    })
+                })
+                .then(res => {
+                    if (!res.ok) {
+                        return res.json().then(data => { throw new Error(data.error || 'Server error'); });
+                    }
+                    return res.json();
+                })
+                .then(data => {
+                    const normalized = data.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                    let imgName;
+                    if (normalized === 'mausholdfamilyofthree') {
+                        imgName = 'mausholdfamilyofthree.png';
+                    } else if (normalized === 'nidoranmale') {
+                        imgName = 'nidoranmale.png';
+                    } else if (normalized === 'nidoranfemale') {
+                        imgName = 'nidoranfemale.png';
+                    } else {
+                        imgName = normalized + '.png';
+                    }
+                    let imgSrc = '/static/pokemon/' + imgName;
+                    // Type box rendering
+                    function typeBox(type, correct) {
+                        if (!type) return '';
+                        return `<span class="type-box ${correct ? 'type-correct' : 'type-incorrect'}">${type.charAt(0).toUpperCase() + type.slice(1)}</span>`;
+                    }
+                    function genBox(gen, correct, guessGen, targetGen) {
+                        let arrow = '';
+                        if (typeof guessGen === 'number' && typeof targetGen === 'number') {
+                            if (guessGen < targetGen) arrow = ' ↑';
+                            else if (guessGen > targetGen) arrow = ' ↓';
+                        }
+                        return `<span class="type-box ${correct ? 'type-correct' : 'type-incorrect'}" style="min-width:48px;">Gen ${gen}${arrow}</span>`;
+                    }
+                    // Weight box rendering
+                    function weightBox(weight, targetWeight) {
+                        if (weight === null || weight === undefined || weight === 0 || isNaN(weight) || targetWeight === null || targetWeight === undefined || targetWeight === 0 || isNaN(targetWeight)) {
+                            return `<span class="weight-box weight-incorrect">? kg</span>`;
+                        }
+                        if (typeof weight === 'string') weight = Number(weight);
+                        if (typeof targetWeight === 'string') targetWeight = Number(targetWeight);
+                        let diff = Math.abs(weight - targetWeight);
+                        let margin = targetWeight * 0.1;
+                        let cls = '';
+                        let arrow = '';
+                        if (weight === targetWeight) {
+                            cls = 'weight-correct';
+                        } else if (diff <= margin) {
+                            cls = 'weight-close';
+                        } else {
+                            cls = 'weight-incorrect';
+                        }
+                        if (weight > targetWeight) arrow = '↓'; // too high
+                        else if (weight < targetWeight) arrow = '↑'; // too low
+                        return `<span class="weight-box ${cls}">${weight.toFixed(1)} kg ${arrow}</span>`;
+                    }
+                    // Height box rendering
+                    function heightBox(height, targetHeight) {
+                        if (height === null || height === undefined || height === 0 || isNaN(height) || targetHeight === null || targetHeight === undefined || targetHeight === 0 || isNaN(targetHeight)) {
+                            return `<span class="height-box height-incorrect">? m</span>`;
+                        }
+                        if (typeof height === 'string') height = Number(height);
+                        if (typeof targetHeight === 'string') targetHeight = Number(targetHeight);
+                        let diff = Math.abs(height - targetHeight);
+                        let margin = targetHeight * 0.1;
+                        let cls = '';
+                        let arrow = '';
+                        if (height === targetHeight) {
+                            cls = 'height-correct';
+                        } else if (diff <= margin) {
+                            cls = 'height-close';
+                        } else {
+                            cls = 'height-incorrect';
+                        }
+                        if (height > targetHeight) arrow = '↓'; // too high
+                        else if (height < targetHeight) arrow = '↑'; // too low
+                        return `<span class="height-box ${cls}">${height.toFixed(1)} m ${arrow}</span>`;
+                    }
+                    let html = `<div style="display:flex;align-items:center;gap:18px;">`;
+                    html += `<img src="${imgSrc}" alt="Pokemon" style="width:80px;height:80px;object-fit:contain;border-radius:10px;background:#f3f3f3;">`;
+                    html += `<div style="text-align:left;">`;
+                    html += `<span style=\"font-size:1.2em;font-weight:bold;\">`;
+                    if (normalized === 'mausholdfamilyofthree') {
+                        html += 'Maushold';
+                    } else if (normalized === 'nidoranmale') {
+                        html += 'Nidoran♂';
+                    } else if (normalized === 'nidoranfemale') {
+                        html += 'Nidoran♀';
+                    } else {
+                        html += regionalDisplayName(data.name);
+                    }
+                    html += `</span><br>`;
+                    html += genBox(data.generation_number, data.generation, data.generation_number, data.target_generation_number) + ' ';
+                    html += typeBox(data.type1_name, data.type1) + (data.type2_name ? ' ' + typeBox(data.type2_name, data.type2) : '');
+                    html += ' ' + weightBox(data.weight, data.target_weight);
+                    html += ' ' + heightBox(data.height, data.target_height);
+                    html += `</div></div>`;
+                    let resultText = '';
+                    // Only show 'You got it!' if the name matches the target's name (case-insensitive, normalized)
+                    if (normalized === data.target_name?.toLowerCase().replace(/[^a-z0-9]/g, '')) {
+                        resultText = '<br><span class="correct">You got it! 🎉</span>';
+                    }
+                    showResult(html + resultText, true);
+                    addGuessToList(data);
+                    guessInput.value = '';
+                })
+                .catch(err => showResult(err.message || 'Error connecting to server.', false));
+            }
+
+            function showResult(msg, success) {
+                const box = document.getElementById('resultBox');
+                box.innerHTML = msg;
+                box.style.border = success ? '2px solid #3b4cca' : '2px solid #c62828';
+            }
+
+            function showGiveUpModal(pokemon) {
+                const modal = document.getElementById('giveUpModal');
+                const content = document.getElementById('giveUpContent');
+                let imgName = pokemon.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                if (imgName === 'mausholdfamilyofthree') imgName = 'mausholdfamilyofthree';
+                else if (imgName === 'nidoranmale') imgName = 'nidoranmale';
+                else if (imgName === 'nidoranfemale') imgName = 'nidoranfemale';
+                let imgSrc = '/static/pokemon/' + imgName + '.png';
+                let html = `<h2 style='margin-top:0;color:#3b4cca;'>The Pokémon of the day is...</h2>`;
+                html += `<img src='${imgSrc}' alt='${pokemon.displayName}' style='width:120px;height:120px;object-fit:contain;border-radius:12px;background:#f3f3f3;margin-bottom:1em;'>`;
+                html += `<div style='font-size:1.3em;font-family:PKMN RBYGSC,Arial,sans-serif;font-weight:bold;margin-bottom:0.5em;'>${pokemon.displayName}</div>`;
+                if (pokemon.generation) {
+                  html += `<div style='margin-bottom:0.5em;'>Generation: <b>${pokemon.generation}</b></div>`;
+                }
+                if (pokemon.type1 || pokemon.type2) {
+                  html += `<div style='margin-bottom:0.5em;'>Type:`;
+                  if (pokemon.type1) html += ` <span class='type-box' style='background:#3b4cca;'>${pokemon.type1}</span>`;
+                  if (pokemon.type2) html += ` <span class='type-box' style='background:#c62828;'>${pokemon.type2}</span>`;
+                  html += `</div>`;
+                }
+                if (pokemon.weight) {
+                  html += `<div style='margin-bottom:0.5em;'>Weight: <b>${pokemon.weight} kg</b></div>`;
+                }
+                if (pokemon.height) {
+                  html += `<div style='margin-bottom:0.5em;'>Height: <b>${pokemon.height} m</b></div>`;
+                }
+                html += `<div id='pokedexEntry' style='margin:1em 0;font-style:italic;color:#444;'>Loading Pokédex entry...</div>`;
+                html += `<div style='margin-top:1.5em;display:flex;gap:18px;justify-content:center;'>`;
+                html += `<button id='playAgainBtn' style='padding:0.5em 1.2em;background:#3b4cca;color:#fff;border:none;border-radius:6px;font-size:1em;cursor:pointer;'>Play again</button>`;
+                html += `<button id='customGameBtn' style='padding:0.5em 1.2em;background:#43c6ac;color:#fff;border:none;border-radius:6px;font-size:1em;cursor:pointer;'>Create custom game</button>`;
+                html += `</div>`;
+                content.innerHTML = html;
+                modal.style.display = 'flex';
+                document.getElementById('mainContent').style.filter = 'blur(2px)';
+                setTimeout(function() {
+                    const playAgainBtn = document.getElementById('playAgainBtn');
+                    if (playAgainBtn) {
+                        playAgainBtn.onclick = function() {
+                            modal.style.display = 'none';
+                            document.getElementById('mainContent').style.filter = '';
+                            // Clear guesses and UI
+                            guesses.length = 0;
+                            renderGuesses();
+                            document.getElementById('resultBox').innerHTML = '';
+                            document.getElementById('guessInput').value = '';
+                        };
+                    }
+                    const customGameBtn = document.getElementById('customGameBtn');
+                    if (customGameBtn) {
+                        customGameBtn.onclick = function() {
+                            // Create a modal for custom game selection
+                            let customModal = document.createElement('div');
+                            customModal.id = 'customGameModal';
+                            customModal.style = 'position:fixed;z-index:3000;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;';
+                            let inner = document.createElement('div');
+                            inner.style = 'background:#fff;padding:2rem 2.5rem;border-radius:12px;max-width:420px;box-shadow:0 4px 32px rgba(0,0,0,0.2);text-align:center;position:relative;z-index:3100;';
+                            inner.innerHTML = `
+                                <h2 style='margin-top:0;color:#3b4cca;'>Create a Custom Game</h2>
+                                <div style='margin-bottom:1em;'>Choose a Pokémon for your custom game:</div>
+                                <input type='text' id='customGameInput' class='guess-input' placeholder='Enter Pokémon name...' autocomplete='off' style='width:80%;margin-bottom:0.5em;'>
+                                <div id='customGameAutocomplete' class='autocomplete-list' style='display:none;position:relative;z-index:3200;'></div>
+                                <div id='customGameDidYouMean' class='didyoumean' style='display:none'></div>
+                                <button id='generateCustomLinkBtn' style='margin-top:1em;padding:0.5em 1.2em;background:#43c6ac;color:#fff;border:none;border-radius:6px;font-size:1em;cursor:pointer;'>Generate Link</button>
+                                <div id='customGameLink' style='margin-top:1.2em;word-break:break-all;'></div>
+                                <button id='closeCustomGameModal' style='margin-top:1.5em;padding:0.4em 1em;background:#c62828;color:#fff;border:none;border-radius:6px;font-size:0.98em;cursor:pointer;'>Cancel</button>
+                            `;
+                            customModal.appendChild(inner);
+                            document.body.appendChild(customModal);
+                            // Blur main content and give up modal
+                            document.getElementById('mainContent').style.filter = 'blur(2px)';
+                            document.getElementById('giveUpModal').style.filter = 'blur(2px)';
+                            // Autocomplete logic (reuse from main input)
+                            let currentFocus = -1;
+                            const input = document.getElementById('customGameInput');
+                            const list = document.getElementById('customGameAutocomplete');
+                            const didYouMean = document.getElementById('customGameDidYouMean');
+                            input.addEventListener('input', function() {
+                                const val = input.value;
+                                const matches = filterPokemonNames(val);
+                                list.innerHTML = '';
+                                didYouMean.style.display = 'none';
+                                didYouMean.innerHTML = '';
+                                if (matches.length === 0 && val) {
+                                    const suggestion = findClosestPokemonName(val);
+                                    if (suggestion) {
+                                        didYouMean.innerHTML = `Did you mean <b>${suggestion.display}</b>?`;
+                                        didYouMean.style.display = 'block';
+                                    }
+                                    list.style.display = 'none';
+                                    return;
+                                }
+                                if (matches.length === 0 || !val) {
+                                    list.style.display = 'none';
+                                    return;
+                                }
+                                matches.slice(0, 12).forEach((obj, idx) => {
+                                    const div = document.createElement('div');
+                                    div.className = 'autocomplete-item';
+                                    const img = document.createElement('img');
+                                    img.src = '/static/pokemon/' + canonicalToSprite(obj.value);
+                                    img.alt = obj.display;
+                                    img.className = 'autofill-sprite';
+                                    div.appendChild(img);
+                                    div.innerHTML += obj.display;
+                                    div.onclick = function() {
+                                        input.value = obj.display;
+                                        input.setAttribute('data-normalized', obj.value);
+                                        list.style.display = 'none';
+                                        didYouMean.style.display = 'none';
+                                        input.focus();
+                                    };
+                                    list.appendChild(div);
+                                });
+                                list.style.display = 'block';
+                                currentFocus = -1;
+                            });
+                            input.addEventListener('keydown', function(e) {
+                                let items = list.getElementsByClassName('autocomplete-item');
+                                if (list.style.display === 'none' || items.length === 0) return;
+                                if (e.key === 'ArrowDown') {
+                                    currentFocus++;
+                                    addActive(items);
+                                    e.preventDefault();
+                                } else if (e.key === 'ArrowUp') {
+                                    currentFocus--;
+                                    addActive(items);
+                                    e.preventDefault();
+                                } else if (e.key === 'Enter') {
+                                    if (currentFocus > -1 && items[currentFocus]) {
+                                        items[currentFocus].click();
+                                        e.preventDefault();
+                                    }
+                                }
+                            });
+                            function addActive(items) {
+                                if (!items) return;
+                                removeActive(items);
+                                if (currentFocus >= items.length) currentFocus = 0;
+                                if (currentFocus < 0) currentFocus = items.length - 1;
+                                items[currentFocus].classList.add('active');
+                            }
+                            function removeActive(items) {
+                                for (let i = 0; i < items.length; i++) {
+                                    items[i].classList.remove('active');
+                                }
+                            }
+                            document.addEventListener('click', function(e) {
+                                if (!e.target.closest('#customGameInput')) {
+                                    list.style.display = 'none';
+                                    didYouMean.style.display = 'none';
+                                }
+                            });
+                            // Generate Link button logic
+                            document.getElementById('generateCustomLinkBtn').onclick = function() {
+                                let val = input.value.trim();
+                                let canonical = input.getAttribute('data-normalized');
+                                if (!canonical) {
+                                    for (const obj of pokemonNames) {
+                                        if (obj.display.toLowerCase() === val.toLowerCase() || obj.value.toLowerCase() === val.toLowerCase()) {
+                                            canonical = obj.value;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!canonical) {
+                                    for (const obj of pokemonNames) {
+                                        if (obj.display.toLowerCase().replace(/[^a-z0-9]/g, '') === val.toLowerCase().replace(/[^a-z0-9]/g, '')) {
+                                            canonical = obj.value;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!canonical) {
+                                    document.getElementById('customGameLink').innerHTML = '<span style="color:#c62828;">Please select a valid Pokémon.</span>';
+                                    return;
+                                }
+                                // Placeholder: show a fake link (future: backend support)
+                                let url = window.location.origin + window.location.pathname + '?custom=' + encodeURIComponent(canonical);
+                                document.getElementById('customGameLink').innerHTML = `<b>Shareable link:</b><br><a href='${url}' target='_blank' style='color:#3b4cca;'>${url}</a><br><span style='color:#888;font-size:0.95em;'>(Custom games require backend support to work fully.)</span>`;
+                            };
+                            // Close modal logic
+                            document.getElementById('closeCustomGameModal').onclick = function() {
+                                document.body.removeChild(customModal);
+                                document.getElementById('mainContent').style.filter = '';
+                                document.getElementById('giveUpModal').style.filter = '';
+                            };
+                        };
+                    }
+                }, 0);
+                // Fetch Pokédex entry from PokéAPI
+                fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemon.apiName}/`)
+                    .then(res => res.json())
+                    .then(data => {
+                        let entries = data.flavor_text_entries.filter(e => e.language.name === 'en');
+                        if (entries.length > 0) {
+                            let entry = entries[Math.floor(Math.random() * entries.length)].flavor_text.replace(/\f|\n|\r/g, ' ');
+                            document.getElementById('pokedexEntry').textContent = entry;
+                        } else {
+                            document.getElementById('pokedexEntry').textContent = 'No Pokédex entry found.';
+                        }
+                    })
+                    .catch(() => {
+                        document.getElementById('pokedexEntry').textContent = 'No Pokédex entry found.';
+                    });
+            }
+
+            function revealAnswer() {
+                fetch('/pokemon_of_the_day?timezone_offset=' + getTimezoneOffset())
+                .then(res => res.json())
+                .then(data => {
+                    // Compose displayName and API name
+                    let displayName = regionalDisplayName(data.name);
+                    let apiName = data.name.toLowerCase().replace(/[^a-z0-9-]/g, '');
+                    // Special cases for API
+                    if (apiName === 'nidoranmale') apiName = 'nidoran-m';
+                    if (apiName === 'nidoranfemale') apiName = 'nidoran-f';
+                    if (apiName === 'mausholdfamilyofthree') apiName = 'maushold';
+                    // Defensive: fallback to data.type1 and data.type2 if type1_name/type2_name are missing
+                    let type1 = data.type1_name || data.type1 || '';
+                    let type2 = data.type2_name || data.type2 || '';
+                    let weight = (typeof data.weight !== 'undefined' && data.weight !== null) ? data.weight : (typeof data.weight_kg !== 'undefined' ? data.weight_kg : '');
+                    let height = (typeof data.height !== 'undefined' && data.height !== null) ? data.height : (typeof data.height_m !== 'undefined' ? data.height_m : '');
+                    showGiveUpModal({
+                        name: data.name,
+                        displayName: displayName,
+                        generation: data.generation_number || data.generation || '',
+                        type1: type1 ? type1.charAt(0).toUpperCase() + type1.slice(1) : '',
+                        type2: type2 ? type2.charAt(0).toUpperCase() + type2.slice(1) : '',
+                        weight: weight,
+                        height: height,
+                        apiName: apiName
+                    });
+                });
+            }
+
+            // Ensure revealAnswer is globally accessible
+            window.revealAnswer = revealAnswer;
+
+            function updateAttemptCounter() {
+                const counter = document.getElementById('attemptCounter');
+                const n = guesses.length;
+                let color = '#2e7d32'; // green
+                if (n >= 10 && n <= 14) color = '#fbc02d'; // yellow
+                else if (n > 14) color = '#c62828'; // red
+                counter.textContent = `Attempts: ${n}`;
+                counter.style.color = color;
+            }
+
+            // Patch addGuessToList and renderGuesses to update counter
+            const origAddGuessToList = addGuessToList;
+            addGuessToList = function(data) {
+                guesses.push(data);
+                renderGuesses();
+                updateAttemptCounter();
+            };
+            const origRenderGuesses = renderGuesses;
+            renderGuesses = function() {
+                origRenderGuesses();
+                updateAttemptCounter();
+            };
+            window.onload = (function(orig) {
+                return function() {
+                    if (orig) orig();
+                    updateAttemptCounter();
+                };
+            })(window.onload);
+
+            function addGuessToList(data) {
+                guesses.push(data);
+                renderGuesses();
+            }
+
+            function renderGuesses() {
+                const list = document.getElementById('guessesList');
+                list.innerHTML = '';
+                guesses.forEach(g => {
+                    const normalized = g.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+                    let imgName;
+                    let displayName;
+                    if (normalized === 'mausholdfamilyofthree') {
+                        imgName = 'mausholdfamilyofthree.png';
+                        displayName = 'Maushold';
+                    } else if (normalized === 'nidoranmale') {
+                        imgName = 'nidoranmale.png';
+                        displayName = 'Nidoran♂';
+                    } else if (normalized === 'nidoranfemale') {
+                        imgName = 'nidoranfemale.png';
+                        displayName = 'Nidoran♀';
+                    } else if (normalized === 'basculegionfemale') {
+                        imgName = 'basculegion.png';
+                        displayName = 'Basculegion';
+                    } else {
+                        imgName = normalized + '.png';
+                        displayName = regionalDisplayName(g.name);
+                    }
+                    let imgSrc = '/static/pokemon/' + imgName;
+                    function typeBox(type, correct) {
+                        if (!type) return '';
+                        return `<span class="type-box ${correct ? 'type-correct' : 'type-incorrect'}">${type.charAt(0).toUpperCase() + type.slice(1)}</span>`;
+                    }
+                    function genBox(gen, correct, guessGen, targetGen) {
+                        let arrow = '';
+                        if (typeof guessGen === 'number' && typeof targetGen === 'number') {
+                            if (guessGen < targetGen) arrow = ' ↑';
+                            else if (guessGen > targetGen) arrow = ' ↓';
+                        }
+                        return `<span class="type-box ${correct ? 'type-correct' : 'type-incorrect'}" style="min-width:48px;">Gen ${gen}${arrow}</span>`;
+                    }
+                    // Weight box rendering
+                    function weightBox(weight, targetWeight) {
+                        if (weight === null || weight === undefined || weight === 0 || isNaN(weight) || targetWeight === null || targetWeight === undefined || targetWeight === 0 || isNaN(targetWeight)) {
+                            return `<span class="weight-box weight-incorrect">? kg</span>`;
+                        }
+                        if (typeof weight === 'string') weight = Number(weight);
+                        if (typeof targetWeight === 'string') targetWeight = Number(targetWeight);
+                        let diff = Math.abs(weight - targetWeight);
+                        let margin = targetWeight * 0.1;
+                        let cls = '';
+                        let arrow = '';
+                        if (weight === targetWeight) {
+                            cls = 'weight-correct';
+                        } else if (diff <= margin) {
+                            cls = 'weight-close';
+                        } else {
+                            cls = 'weight-incorrect';
+                        }
+                        if (weight > targetWeight) arrow = '↓'; // too high
+                        else if (weight < targetWeight) arrow = '↑'; // too low
+                        return `<span class="weight-box ${cls}">${weight.toFixed(1)} kg ${arrow}</span>`;
+                    }
+                    // Height box rendering
+                    function heightBox(height, targetHeight) {
+                        if (height === null || height === undefined || height === 0 || isNaN(height) || targetHeight === null || targetHeight === undefined || targetHeight === 0 || isNaN(targetHeight)) {
+                            return `<span class="height-box height-incorrect">? m</span>`;
+                        }
+                        if (typeof height === 'string') height = Number(height);
+                        if (typeof targetHeight === 'string') targetHeight = Number(targetHeight);
+                        let diff = Math.abs(height - targetHeight);
+                        let margin = targetHeight * 0.1;
+                        let cls = '';
+                        let arrow = '';
+                        if (height === targetHeight) {
+                            cls = 'height-correct';
+                        } else if (diff <= margin) {
+                            cls = 'height-close';
+                        } else {
+                            cls = 'height-incorrect';
+                        }
+                        if (height > targetHeight) arrow = '↓'; // too high
+                        else if (height < targetHeight) arrow = '↑'; // too low
+                        return `<span class="height-box ${cls}">${height.toFixed(1)} m ${arrow}</span>`;
+                    }
+                    let entry = `<div class=\"guess-entry\" style=\"display:flex;align-items:center;gap:18px;\">`;
+                    entry += `<img src=\"${imgSrc}\" alt=\"${displayName}\" style=\"width:60px;height:60px;object-fit:contain;border-radius:8px;background:#f3f3f3;\">`;
+                    entry += `<div style=\"text-align:left;\">`;
+                    entry += `<span style=\"font-size:1.1em;font-weight:bold;\">${displayName}</span><br>`;
+                    entry += genBox(g.generation_number, g.generation, g.generation_number, g.target_generation_number) + ' ';
+                    entry += typeBox(g.type1_name, g.type1) + (g.type2_name ? ' ' + typeBox(g.type2_name, g.type2) : '');
+                    entry += ' ' + weightBox(g.weight, g.target_weight);
+                    entry += ' ' + heightBox(g.height, g.target_height);
+                    entry += `</div></div>`;
+                    list.innerHTML += entry;
+                });
+            }
+
+            // Helper: Levenshtein distance for typo correction
+            function levenshtein(a, b) {
+                const an = a.length, bn = b.length;
+                if (an === 0) return bn;
+                if (bn === 0) return an;
+                const matrix = [];
+                for (let i = 0; i <= bn; ++i) matrix[i] = [i];
+                for (let j = 0; j <= an; ++j) matrix[0][j] = j;
+                for (let i = 1; i <= bn; ++i) {
+                    for (let j = 1; j <= an; ++j) {
+                        if (b.charAt(i - 1).toLowerCase() === a.charAt(j - 1).toLowerCase()) {
+                            matrix[i][j] = matrix[i - 1][j - 1];
+                        } else {
+                            matrix[i][j] = Math.min(
+                                matrix[i - 1][j - 1] + 1, // substitution
+                                matrix[i][j - 1] + 1,     // insertion
+                                matrix[i - 1][j] + 1      // deletion
+                        );
+                        }
+                    }
+                }
+                return matrix[bn][an];
+            }
+
+            let pokemonNames = [];
+            fetch('/pokemon_names')
+                .then(res => res.json())
+                .then(data => { pokemonNames = data.names; });
+
+            // Update: pokemonNames is now an array of { display, value }
+            function filterPokemonNames(val) {
+                val = val.trim().toLowerCase();
+                if (!val) return [];
+                // Prioritize names that start with input, then those that include it
+                let starts = pokemonNames.filter(obj => obj.display.toLowerCase().startsWith(val));
+                let contains = pokemonNames.filter(obj => !obj.display.toLowerCase().startsWith(val) && obj.display.toLowerCase().includes(val));
+                return starts.concat(contains);
+            }
+
+            function findClosestPokemonName(val) {
+                val = val.trim().toLowerCase();
+                if (!val) return null;
+                let minDist = Infinity, closest = null;
+                for (const obj of pokemonNames) {
+                    const dist = levenshtein(val, obj.display.toLowerCase());
+                    if (dist < minDist) {
+                        minDist = dist;
+                        closest = obj;
+                    }
+                }
+                // Only suggest if typo is small and not an exact match
+                if (minDist > 0 && minDist <= 2) return closest;
+                return null;
+            }
+
+            function showAutocomplete() {
+                const input = document.getElementById('guessInput');
+                const list = document.getElementById('autocompleteList');
+                const didYouMean = document.getElementById('didYouMean');
+                const val = input.value;
+                const matches = filterPokemonNames(val);
+                list.innerHTML = '';
+                didYouMean.style.display = 'none';
+                didYouMean.innerHTML = '';
+                if (matches.length === 0 && val) {
+                    // If no matches, show "Did you mean"
+                    const suggestion = findClosestPokemonName(val);
+                    if (suggestion) {
+                        didYouMean.innerHTML = `Did you mean <b>${suggestion.display}</b>?`;
+                        didYouMean.style.display = 'block';
+                    }
+                    list.style.display = 'none';
+                    return;
+                }
+                if (matches.length === 0 || !val) {
+                    list.style.display = 'none';
+                    return;
+                }
+                matches.slice(0, 12).forEach((obj, idx) => {
+                    const div = document.createElement('div');
+                    div.className = 'autocomplete-item';
+                    let displayName = obj.display;
+                    let normalizedName = obj.value;
+                    // Add sprite image
+                    const img = document.createElement('img');
+                    img.src = '/static/pokemon/' + canonicalToSprite(normalizedName);
+                    img.alt = displayName;
+                    img.className = 'autofill-sprite';
+                    div.appendChild(img);
+                    div.innerHTML += displayName;
+                    div.onclick = function() {
+                        input.value = displayName;
+                        input.setAttribute('data-normalized', normalizedName); // Store normalized name
+                        list.style.display = 'none';
+                        didYouMean.style.display = 'none';
+                        input.focus();
+                    };
+                    list.appendChild(div);
+                });
+                list.style.display = 'block';
+                currentFocus = -1;
+            }
+
+            function canonicalToSprite(name) {
+                // Normalize to match static/pokemon/ filenames
+                return name.replace(/[^a-z0-9]/gi, '').toLowerCase() + '.png';
+            }
+
+            document.getElementById('guessInput').addEventListener('input', showAutocomplete);
+
+            document.getElementById('guessInput').addEventListener('keydown', function(e) {
+                const list = document.getElementById('autocompleteList');
+                let items = list.getElementsByClassName('autocomplete-item');
+                if (list.style.display === 'none' || items.length === 0) return;
+                if (e.key === 'ArrowDown') {
+                    currentFocus++;
+                    addActive(items);
+                    e.preventDefault();
+                } else if (e.key === 'ArrowUp') {
+                    currentFocus--;
+                    addActive(items);
+                    e.preventDefault();
+                } else if (e.key === 'Enter') {
+                    if (currentFocus > -1 && items[currentFocus]) {
+                        items[currentFocus].click();
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            function addActive(items) {
+                if (!items) return;
+                removeActive(items);
+                if (currentFocus >= items.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = items.length - 1;
+                items[currentFocus].classList.add('active');
+            }
+
+            function removeActive(items) {
+                for (let i = 0; i < items.length; i++) {
+                    items[i].classList.remove('active');
+                }
+            }
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.guess-section')) {
+                    document.getElementById('autocompleteList').style.display = 'none';
+                    document.getElementById('didYouMean').style.display = 'none';
+                }
+            });
+        </script>
+        <script>
+            // Report Issue button logic
+            document.addEventListener('DOMContentLoaded', function() {
+                const btn = document.getElementById('reportIssueBtn');
+                if (btn) {
+                    btn.onclick = function() {
+                        window.open('https://github.com/RodferrRemz/Pokemon-of-the-day/issues/new', '_blank');
+                    };
+                }
+            });
+        </script>
+    </body>
+</html>
