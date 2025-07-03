@@ -1,0 +1,5 @@
+
+# Ignore large archive files
+static/pokemon/Archive.zip
+static/pokemon/Archive.zip.part-aa
+static/pokemon/Archive.zip.part-ab
